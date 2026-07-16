@@ -1,23 +1,24 @@
-# YouTube Plus (YTweaks Fork)
-[YouTube Plus](https://github.com/dayanch96/YTLite) with added plugins.
+# <p align="left"><img src="./Resources/repoHeader.png" width="1000"></p>
+
+
+
+[YouTube Plus](https://github.com/dayanch96/YTLite) with added plugins and fixes.
 
 v20.10.4 is ***strongly*** recommended for proper compatibility
 
-[NOTE] Some users are reporting a prompt to update, blocking app usage on 20.10.4. This is a known issue and is being looked into
+This project focuses on bundling YouTube Plus with [YTweaks](https://github.com/fosterbarnes/YTweaks) and other various tweaks. 
 
-This repo focuses on simplifying the build process of YouTube Plus, and adding more optional tweaks to bundle with it (specifically [YTweaks](https://github.com/fosterbarnes/YTweaks)). No changes have been made to the YouTube Plus .deb itself, just the tweaks that get packaged with it. 
-
-When building the app, the latest stable YouTube Plus .deb is downloaded from the original repo, then other tweaks are built from source. All tweaks are then injected into your IPA.
+When building the app, the latest patches to YouTube Plus, YTweaks, theos and all other included tweaks are cloned and built from source. All tweaks are then injected into your IPA. If you follow either build tutorial, you'll automatically end up with the latest tweaks and patches.
 
 YTweaks added settings:
-- **Fullscreen to the right or left:** Locks fullscreen orientation.
-- **Night Mode**: Lowers brightness below device minimum by "faking it" with an app-wide semi-transparent black overlay. Works best on OLED devices.
-- **Disable floating miniplayer:** Restores the old miniplayer by disabling the floating miniplayer.
-- **Virtual fullscreen bezels:** Adds invisible touch-safe zones on black bars to prevent accidental taps and skips.
-- **Fix Casting** - Attempts to fix casting by changing some A/B flags. Only works on v20.10.4 or lower
-
-Experimental planned features
-- **Hide AI Summaries:** Hides AI summaries that appear in the feed.
+- **Force Fullscreen Direction (Button)**: Choose Off, Left, Right, or Portrait for the fullscreen button.
+- **Force Fullscreen Direction (Gesture)**: Choose Off, Left, Right, or Portrait for the swipe-up gesture. Independent of the button setting.
+- **Disable floating miniplayer**: Restores the old miniplayer by disabling the floating miniplayer.
+- **Virtual fullscreen bezels**: Adds invisible touch-safe zones on black bars to prevent accidental taps and skips.
+- **Fix Casting** - Attempts to fix casting by changing some A/B flags. Only works on v20.10.4 or lower.
+- **Hide AI Summaries**: Attempts to block/hide AI summaries below videos in the home feed.
+- **Fake Brightness**: Lowers apparent brightness below the system minimum. Works best on OLED devices.
+- **Schedule Fake Brightness (Night Mode)**: Automatically applies fake brightness during a set time range.
 
 
 Added tweaks:
@@ -25,7 +26,12 @@ Added tweaks:
 - [YTABConfig](https://github.com/PoomSmart/YTABConfig)
 - [YTIcons](https://github.com/PoomSmart/YTIcons)
 - [YouGroupSettings](https://github.com/fosterbarnes/YouGroupSettings)
-- [Gonerino](https://github.com/castdrian/Gonerino)
+- [Gonerino](https://github.com/fosterbarnes/YGonerino)
+- [AutoFLEX](https://github.com/pwnless/AutoFLEX)
+- [YouMute](https://github.com/PoomSmart/YouMute)
+- [YouLoop](https://github.com/bhackel/YouLoop)
+- [YouSpeed](https://github.com/PoomSmart/YouSpeed)
+- [YouGetCaption](https://github.com/PoomSmart/YouGetCaption)
 
 Original repo: https://github.com/dayanch96/YTLite
 
@@ -56,7 +62,7 @@ If you plan on testing, adding tweaks that aren't integrated with this repo, mak
 <em>We cannot provide this file due to legal reasons.</em><br>
 
 - Upload the decrypted IPA to a file hosting service (e.g., litterbox.catbox.moe or Dropbox).<br>
-<em>If you use Dropbox, change the end of the URL from <code>dl=0</code> to <code>dl=1</code>.</em><br>
+<em>You can't skip this step, copy/pasting a link from a decrypt IPA site will not work.</em><br>
 
 - Paste the direct download link to the decrypted IPA into the provided field.<br>
 <em><strong>NOTE:</strong> Make sure to provide a direct download link to the file, not a webpage. Otherwise, the process will fail.</em><br>
@@ -70,7 +76,7 @@ If you plan on testing, adding tweaks that aren't integrated with this repo, mak
 <strong>Additional workflow options:</strong><br>
 - The version of YTLite to use:<br>
   <em>Input a release tag from [dayanch96/YTLite/tags](https://github.com/dayanch96/YTLite/tags)</em><br>
-  Example: `5.2b3` or `v5.2b3`<br>
+  Example: `5.2b3` or `v5.2b4`<br>
 - iOS SDK Version:<br>
   <em>16.5 should be used for older devices, 18.6 can be used for newer devices</em><br>
   Example: `16.5`<br>
@@ -118,90 +124,68 @@ fi
 
 brew install git
 cd "$HOME/Desktop"
-git clone --filter=blob:none --no-checkout https://github.com/fosterbarnes/YTPlusYTweaks
-cd YTPlusYTweaks || exit
+git clone --filter=blob:none --no-checkout https://github.com/fosterbarnes/ytPlusYTweaks
+cd ytPlusYTweaks || exit
 git sparse-checkout init --no-cone
 git sparse-checkout set \
     'deb/*' \
     'ipa/*' \
     'build.sh' \
-    'build_dependencies.sh' \
+    'buildDependencies.sh' \
     'README.md'
 git checkout main
 ```
 2. Run the build dependencies script
 
 ```bash
-./build_dependencies.sh
+./buildDependencies.sh
 ```
 3. Run the build script to build your app
 
-Build with a URL to a decrypted IPA
+Option A: Place a decrypted IPA into 'ytPlusYTweaks/ipa'. Build with default included tweaks.
+
 ```bash
-./build.sh --ipa URL_HERE
+./build.sh
 ```
 
-Build with the IPA in 'YTPlusYTweaks/ipa'
+Option B: Use a direct link to an IPA. Build with default included tweaks.
+
 ```bash
-./build.sh --ipa
+./build.sh -ipa <URL> 
 ```
 
-Build with any pre-built DEBs in 'YTPlusYTweaks/deb'
+Option C: Build with your own debs from 'ytPlusYTweaks/deb'
+
 ```bash
-./build.sh --ipa --deb
+./build.sh -myDebs
 ```
 To list all options:
 ```bash
 ./build.sh -h
 ```
+
 ```bash
-YTPlusYTweaks Build Script
+Usage: ./build.sh [options]
 
-Usage: $0 --ipa [URL] [options]
+Default (no flags): builds using the IPA in the ipa/ directory, integrating all default integrated tweaks.
+By default, all tweaks are cloned and built from source. Use '--myDebs' to use your local files in the deb/ directory.
 
-IPAs Source:
-    --ipa [URL]                  If URL provided: download IPA from URL (saves to ipa/)
-                                  If no URL: use local IPA from ipa/ folder (looks for *.ipa files)
-
-Optional Arguments:
-    --deb                        Use pre-built .deb files from deb/ folder. Otherwise, build from source.
-    --tweak-version <version>    Version of YTLite tweak (default: 5.2b4)
-    --display-name <name>        App display name (default: YouTube)
-    --bundle-id <id>             Bundle ID (default: com.google.ios.youtube)
-
-Tweak Integration Flags:
-    --enable-all                 Enable all tweaks
-    --disable-all                Disable all tweaks
-    
-    --enable-youpip              YouPiP (default: true)
-    --enable-ytuhd               YTUHD (default: true)
-    --enable-yq                  YouQuality (default: true)
-    --enable-ryd                 Return YouTube Dislikes (default: true)
-    --enable-demc                DontEatMyContent (default: true)
-    --enable-ytabconfig          YTABConfig (default: true)
-    --enable-ytweaks             YTweaks (default: true)
-    --enable-yougroupsettings    Settings (default: true)
-    --enable-yticons             YTIcons (default: false)
-    --enable-gonerino            Gonerino (default: false)
-
-    --disable-youpip             YouPiP
-    --disable-ytuhd              YTUHD
-    --disable-yq                 YouQuality
-    --disable-ryd                Return YouTube Dislikes
-    --disable-demc               DontEatMyContent
-    --disable-ytabconfig         YTABConfig
-    --disable-ytweaks            YTweaks
-    --disable-yougroupsettings   YouGroupSettings
-    --disable-yticons            YTIcons
-    --disable-gonerino           Gonerino
-
-Other Options:
-    -h, --help                   Show this help message
+Options:
+    -ipa <URL>                          Download IPA from URL to ipa/ before building
+    -myDebs, -md                        Use existing .deb files in deb/ 
+    -sdk <version>                      iOS SDK version: 16.5, 17.5, or 18.6 (default: 16.5)
+    -ytPlusVersion, -ytpv <version>     Version of YTPlus tweak (default: auto-detect latest)
+    -displayName, -dn <name>            App display name (default: YouTube)
+    -bundleID, -bid <id>                Bundle ID (default: com.google.ios.youtube)
+    -test                               Quickly change display name and bundle ID when testing
+                                        Display Name: YTest | Bundle ID: com.google.ios.youtube2
+    -help, -h                           Show this help message
 
 Examples:
-    $0 --ipa https://example.com/youtube.ipa
-    $0 --ipa --deb --disable-all
-    $0 --ipa --disable-yticons --enable-ytweaks
+    ./build.sh
+    ./build.sh --ipa https://example.com/youtube.ipa
+    ./build.sh --myDebs
+    ./build.sh --sdk 17.5 --displayName "YT"
 ```
 </details>
 
@@ -242,22 +226,6 @@ Examples:
   </table>
 </details>
 
-## YouTube Plus Features
-<li>Download videos, audio (including audio track selection), thumbnails, posts, and profile pictures</li>
-<li>Copy video, comment, and post information</li>
-<li>Interface customization: Remove feed elements, reorder tabs, enable OLED mode, and as use Shorts-only mode</li>
-<li>Player settings: Gestures, default quality, preferred audio track</li>
-<li>Save, Load and Restore settings. Clear cache once or automatically on app startup</li>
-<li>Built-in SponsorBlock</li>
-<li>And much, much more</li>
-<br>
-
-
-**YouTube Plus preferences can be found in the YouTube Settings**
-
-**All contributors are listed in the Contributors section**
-**Used open-source libraries are listed in the Open Source Libraries section**
-
 ## Issues, Bugs & Feature Requests
 Fill out an [issue form](https://github.com/fosterbarnes/YTPlusYTweaks/issues) with the applicable option selected and fill out all required info.
 
@@ -267,12 +235,12 @@ Fill out an [issue form](https://github.com/fosterbarnes/YTPlusYTweaks/issues) w
 - [🇮🇹 FAQ in Italiano](https://github.com/dayanch96/YTLite/blob/main/FAQs/FAQ_IT.md)
 - [🇵🇱 FAQ po polsku](https://github.com/dayanch96/YTLite/blob/main/FAQs/FAQ_PL.md)
 
-## Supported YouTube Version
+## Supported Versions
 <ul>
     <li><strong>Recommended:</strong> <em>20.10.4</em></li>
-   <li><strong>Latest confirmed:</strong> <em>21.02.3</em></li>
-   <li><strong>Date tested:</strong> <em>Jan 17, 2025</em></li>
-   <li><strong>YouTube Plus:</strong> <em>5.2 beta 4</em></li>
+   <li><strong>Latest confirmed:</strong> <em>21.26.4</em></li>
+   <li><strong>Date tested:</strong> <em>7/3/26</em></li>
+   <li><strong>YouTube Plus:</strong> <em>5.2.1</em></li>
 </ul>
 
 ## Tweak Integration Details
@@ -340,8 +308,44 @@ Fill out an [issue form](https://github.com/fosterbarnes/YTPlusYTweaks/issues) w
 
 <details>
   <summary>Gonerino</summary>
-  <p>Gonerino is a tweak developed by <a href="https://github.com/castdrian">castdrian</a> that lets you block certain content from your home feed.</p>
-  <p>Source code and additional information are available <a href="https://github.com/castdrian/Gonerino">in castdrian's GitHub repository</a>.</p>
+  <p>Gonerino is a tweak developed by <a href="https://github.com/castdrian">castdrian</a> that lets you block certain content from your home feed. Forked by <a href="https://github.com/FosterBarnes">FosterBarnes</a> as <a href="https://github.com/fosterbarnes/YGonerino">YGonerino</a> with a v1.3.3 fix for home feed blocking.</p>
+  <p>Source code and additional information are available <a href="https://github.com/fosterbarnes/YGonerino">in fosterbarnes's GitHub repository</a>.</p>
+</details>
+
+<details>
+  <summary>AutoFLEX</summary>
+  <p>AutoFLEX is a tweak developed by <a href="https://github.com/pwnless">pwnless</a> that injects the <a href="https://github.com/FLEXTool/FLEX">FLEX</a> in-app debugger into sideloaded apps.</p>
+  <p>Source code and additional information are available <a href="https://github.com/pwnless/AutoFLEX">in pwnless's GitHub repository</a>.</p>
+</details>
+
+<details>
+  <summary>YouMute</summary>
+  <p>Mutes/unmutes videos on iOS YouTube app faster. Developed by <a href="https://github.com/PoomSmart">PoomSmart</a> 
+  <p>Source code and additional information are available <a href="https://github.com/PoomSmart/YouMute">in PoomSmart's GitHub repository</a>.</p>
+</details>
+
+<details>
+  <summary>YouSpeed</summary>
+  <p>Views/changes video speed in iOS YouTube app faster. Developed by <a href="https://github.com/PoomSmart">PoomSmart</a> 
+  <p>Source code and additional information are available <a href="https://github.com/PoomSmart/YouSpeed">in PoomSmart's GitHub repository</a>.</p>
+</details>
+
+<details>
+  <summary>YouGetCaption</summary>
+  <p>Adds a player button to enable/disable looping on the current video. Developed by <a href="https://github.com/bhackel">bhackel</a> 
+  <p>Source code and additional information are available <a href="https://github.com/bhackel/YouGetCaption">in bhackel's GitHub repository</a>.</p>
+</details>
+
+<details>
+  <summary>YouLoop</summary>
+  <p>Views and copies captions from YouTube videos. Developed by <a href="https://github.com/PoomSmart">PoomSmart</a> 
+  <p>Source code and additional information are available <a href="https://github.com/PoomSmart/YouGetCaption">in PoomSmart's GitHub repository</a>.</p>
+</details>
+
+<details>
+  <summary>YouFixPlaybackIssues</summary>
+  <p>Fixes the notorious playback issue by presenting to YouTube servers as an Oculus Quest, bypassing the iOS sideload check. Developed by <a href="https://github.com/AppropriateNet2928">AppropriateNet2928</a> with the help of <a href="https://github.com/Tonwalter888">Tonwalter888</a>
+  <p>Source code and additional information are available <a href="https://github.com/AppropriateNet2928/YTLitePlusRenewed/tree/main/YouFixPlaybackIssues">in AppropriateNet2928's GitHub repository</a>.</p>
 </details>
 
 ## Credits
@@ -349,12 +353,22 @@ Thank you to everyone that made this project possible! This project would not ex
 
 [dayanch96](https://github.com/dayanch96) - YTLite
 
-[PoomSmart](https://github.com/PoomSmart) - YouPiP, YTUHD, Return YouTube Dislikes, YouQuality, YTABConfig, YTIcons, YouGroupSettings
+[PoomSmart](https://github.com/PoomSmart) - YouPiP, YTUHD, Return YouTube Dislikes, YouQuality, YTABConfig, YTIcons, YouGroupSettings, YouMute, YouSpeed, YouGetCaption
 
 [therealFoxster](https://github.com/therealFoxster) - DontEatMyContent
 
 [castdrian](https://github.com/castdrian/Gonerino) - Gonerino
 
+[pwnless](https://github.com/pwnless/AutoFLEX) - AutoFLEX
+
 [theos](https://github.com/theos) - theos, SDKs
 
-[Tonwalter888](https://github.com/Tonwalter888/) - YTUHD, SDKs
+[Tonwalter888](https://github.com/Tonwalter888/) - YTUHD, SDKs, YouFixPlaybackIssues
+
+[bhackel](https://github.com/bhackel/) - YouLoop
+
+[AppropriateNet2928](https://github.com/AppropriateNet2928/YTLitePlusRenewed/tree/main/YouFixPlaybackIssues) - YouFixPlaybackIssues
+
+## Join the Telegram channel for more info
+
+[https://t.me/+eMTckUjVWWsxOGZh](https://t.me/+eMTckUjVWWsxOGZh)

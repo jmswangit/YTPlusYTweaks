@@ -5,64 +5,100 @@ on:
     inputs:
 
       enable_youpip:
-        description: "Integrate YouPiP"
+        description: "YouPiP"
         type: boolean
         required: true
         default: true
 
       enable_ytuhd:
-        description: "Integrate YTUHD"
+        description: "YTUHD"
         type: boolean
         required: true
         default: true
 
       enable_yq:
-        description: "Integrate YouQuality"
+        description: "YouQuality"
         type: boolean
         required: true
         default: true
 
       enable_ryd:
-        description: "Integrate Return YouTube Dislikes"
+        description: "Return YouTube Dislikes"
         type: boolean
         required: true
         default: true
 
       enable_demc:
-        description: "Integrate DontEatMyContent"
+        description: "DontEatMyContent"
         type: boolean
         required: true
         default: true
 
       enable_ytabconfig:
-        description: "Integrate YTABConfig"
+        description: "YTABConfig"
         type: boolean
         required: true
         default: true
 
       enable_ytweaks:
-        description: "Integrate YTweaks"
+        description: "YTweaks"
         type: boolean
         required: true
         default: true
 
-      enable_yticons:
-        description: "Integrate YTIcons"
-        type: boolean
-        required: true
-        default: false
-
       enable_gonerino:
-        description: "Integrate Gonerino"
+        description: "Gonerino"
         type: boolean
         required: true
-        default: false
+        default: true
+
+      enable_youmute:
+        description: "YouMute"
+        type: boolean
+        required: true
+        default: true
+
+      enable_youloop:
+        description: "YouLoop"
+        type: boolean
+        required: true
+        default: true
+
+      enable_youspeed:
+        description: "YouSpeed"
+        type: boolean
+        required: true
+        default: true
+
+      enable_yougetcaption:
+        description: "YouGetCaption"
+        type: boolean
+        required: true
+        default: true
+
+      enable_youfixplaybackissues:
+        description: "YouFixPlaybackIssues"
+        type: boolean
+        required: true
+        default: true
 
       enable_yougroupsettings:
         description: "Group Tweak Settings (YouGroupSettings)"
         type: boolean
         required: true
         default: true
+
+      enable_autoflex:
+        description: "AutoFLEX (FLEX debugger)"
+        type: boolean
+        required: true
+        default: false
+
+      enable_yticons:
+        description: "YTIcons"
+        type: boolean
+        required: true
+        default: false
 
       ipa_url:
         description: "URL to the decrypted IPA file"
@@ -71,8 +107,8 @@ on:
         type: string
 
       tweak_version:
-        description: "The version of YTLite to use. E.g. 5.2b3 (Optional - leave empty to use latest tag from github.com/dayanch96/YTLite/tags)"
-        default: ""
+        description: "The version of YTLite to use. E.g. 5.2b3 (Optional - leave empty to use latest release)"
+        default: "5.2.1"
         required: false
         type: string
 
@@ -117,7 +153,7 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v6.0.3
         with:
           #path: main
           submodules: recursive
@@ -128,7 +164,7 @@ jobs:
       - name: Hide sensitive inputs
         uses: levibostian/action-hide-sensitive-inputs@v1
         with:
-          exclude_inputs: bundle_id,display_name,enable_demc,enable_ryd,enable_youpip,enable_yq,enable_ytabconfig,enable_ytweaks,enable_yticons,enable_yougroupsettings,enable_ytuhd,enable_gonerino,info_note,tweak_version,sdk_version
+          exclude_inputs: bundle_id,display_name,enable_demc,enable_ryd,enable_youpip,enable_yq,enable_ytabconfig,enable_ytweaks,enable_yticons,enable_yougroupsettings,enable_ytuhd,enable_gonerino,enable_autoflex,enable_youmute,enable_youloop,enable_youspeed,enable_yougetcaption,enable_youfixplaybackissues,info_note,tweak_version,sdk_version
 
       - name: Check if any tweaks are enabled
         id: check_tweaks
@@ -142,7 +178,13 @@ jobs:
              [ "${{ inputs.enable_ytweaks }}" = "true" ] || \
              [ "${{ inputs.enable_yticons }}" = "true" ] || \
              [ "${{ inputs.enable_yougroupsettings }}" = "true" ] || \
-             [ "${{ inputs.enable_gonerino }}" = "true" ]; then
+             [ "${{ inputs.enable_gonerino }}" = "true" ] || \
+             [ "${{ inputs.enable_autoflex }}" = "true" ] || \
+             [ "${{ inputs.enable_youmute }}" = "true" ] || \
+             [ "${{ inputs.enable_youloop }}" = "true" ] || \
+             [ "${{ inputs.enable_youspeed }}" = "true" ] || \
+             [ "${{ inputs.enable_yougetcaption }}" = "true" ] || \
+             [ "${{ inputs.enable_youfixplaybackissues }}" = "true" ]; then
             echo "enabled=true" >> $GITHUB_OUTPUT
             echo "Tweaks are enabled"
           else
@@ -164,6 +206,12 @@ jobs:
           enable_yticons: ${{ steps.check_tweaks.outputs.enabled == 'true' && inputs.enable_yticons || 'false' }}
           enable_demc: ${{ steps.check_tweaks.outputs.enabled == 'true' && inputs.enable_demc || 'false' }}
           enable_gonerino: ${{ steps.check_tweaks.outputs.enabled == 'true' && inputs.enable_gonerino || 'false' }}
+          enable_autoflex: ${{ steps.check_tweaks.outputs.enabled == 'true' && inputs.enable_autoflex || 'false' }}
+          enable_youmute: ${{ steps.check_tweaks.outputs.enabled == 'true' && inputs.enable_youmute || 'false' }}
+          enable_youloop: ${{ steps.check_tweaks.outputs.enabled == 'true' && inputs.enable_youloop || 'false' }}
+          enable_youspeed: ${{ steps.check_tweaks.outputs.enabled == 'true' && inputs.enable_youspeed || 'false' }}
+          enable_yougetcaption: ${{ steps.check_tweaks.outputs.enabled == 'true' && inputs.enable_yougetcaption || 'false' }}
+          enable_youfixplaybackissues: ${{ steps.check_tweaks.outputs.enabled == 'true' && inputs.enable_youfixplaybackissues || 'false' }}
 
       - name: Download and validate IPA
         run: |
@@ -198,7 +246,7 @@ jobs:
           echo "version=$APP_VERSION" >> $GITHUB_OUTPUT
 
       - name: Install dependencies
-        run: brew install make ldid
+        run: brew install make ldid meson ninja
 
       - name: Set GNU make PATH environment variable
         run: echo "$(brew --prefix make)/libexec/gnubin" >> $GITHUB_PATH
@@ -279,6 +327,12 @@ jobs:
           enable_yticons: ${{ inputs.enable_yticons }}
           enable_demc: ${{ inputs.enable_demc }}
           enable_gonerino: ${{ inputs.enable_gonerino }}
+          enable_autoflex: ${{ inputs.enable_autoflex }}
+          enable_youmute: ${{ inputs.enable_youmute }}
+          enable_youloop: ${{ inputs.enable_youloop }}
+          enable_youspeed: ${{ inputs.enable_youspeed }}
+          enable_yougetcaption: ${{ inputs.enable_yougetcaption }}
+          enable_youfixplaybackissues: ${{ inputs.enable_youfixplaybackissues }}
           sdk_version: ${{ inputs.sdk_version }}
           youpip_commit: ${{ steps.commit_hashes.outputs.youpip }}
           ytuhd_commit: ${{ steps.commit_hashes.outputs.ytuhd }}
@@ -290,7 +344,14 @@ jobs:
           yticons_commit: ${{ steps.commit_hashes.outputs.yticons }}
           demc_commit: ${{ steps.commit_hashes.outputs.demc }}
           gonerino_commit: ${{ steps.commit_hashes.outputs.gonerino }}
+          autoflex_commit: ${{ steps.commit_hashes.outputs.autoflex }}
+          flex_commit: ${{ steps.commit_hashes.outputs.flex }}
           ytvo_commit: ${{ steps.commit_hashes.outputs.ytvo }}
+          youmute_commit: ${{ steps.commit_hashes.outputs.youmute }}
+          youloop_commit: ${{ steps.commit_hashes.outputs.youloop }}
+          youspeed_commit: ${{ steps.commit_hashes.outputs.youspeed }}
+          yougetcaption_commit: ${{ steps.commit_hashes.outputs.yougetcaption }}
+          youfixplaybackissues_commit: ${{ steps.commit_hashes.outputs.youfixplaybackissues }}
 
       - name: Clone tweaks
         if: steps.check_tweaks.outputs.enabled == 'true'
@@ -306,6 +367,12 @@ jobs:
           enable_yticons: ${{ inputs.enable_yticons }}
           enable_demc: ${{ inputs.enable_demc }}
           enable_gonerino: ${{ inputs.enable_gonerino }}
+          enable_autoflex: ${{ inputs.enable_autoflex }}
+          enable_youmute: ${{ inputs.enable_youmute }}
+          enable_youloop: ${{ inputs.enable_youloop }}
+          enable_youspeed: ${{ inputs.enable_youspeed }}
+          enable_yougetcaption: ${{ inputs.enable_yougetcaption }}
+          enable_youfixplaybackissues: ${{ inputs.enable_youfixplaybackissues }}
           cache_youpip_hit: ${{ steps.cache_tweaks_step.outputs.cache_youpip_hit }}
           cache_ytuhd_hit: ${{ steps.cache_tweaks_step.outputs.cache_ytuhd_hit }}
           cache_ryd_hit: ${{ steps.cache_tweaks_step.outputs.cache_ryd_hit }}
@@ -316,7 +383,13 @@ jobs:
           cache_yticons_hit: ${{ steps.cache_tweaks_step.outputs.cache_yticons_hit }}
           cache_demc_hit: ${{ steps.cache_tweaks_step.outputs.cache_demc_hit }}
           cache_gonerino_hit: ${{ steps.cache_tweaks_step.outputs.cache_gonerino_hit }}
+          cache_autoflex_hit: ${{ steps.cache_tweaks_step.outputs.cache_autoflex_hit }}
           cache_ytvo_hit: ${{ steps.cache_tweaks_step.outputs.cache_ytvo_hit }}
+          cache_youmute_hit: ${{ steps.cache_tweaks_step.outputs.cache_youmute_hit }}
+          cache_youloop_hit: ${{ steps.cache_tweaks_step.outputs.cache_youloop_hit }}
+          cache_youspeed_hit: ${{ steps.cache_tweaks_step.outputs.cache_youspeed_hit }}
+          cache_yougetcaption_hit: ${{ steps.cache_tweaks_step.outputs.cache_yougetcaption_hit }}
+          cache_yfpi_hit: ${{ steps.cache_tweaks_step.outputs.cache_yfpi_hit }}
           workspace: ${{ github.workspace }}
 
       - name: Build tweaks
@@ -333,6 +406,12 @@ jobs:
           enable_yticons: ${{ inputs.enable_yticons }}
           enable_demc: ${{ inputs.enable_demc }}
           enable_gonerino: ${{ inputs.enable_gonerino }}
+          enable_autoflex: ${{ inputs.enable_autoflex }}
+          enable_youmute: ${{ inputs.enable_youmute }}
+          enable_youloop: ${{ inputs.enable_youloop }}
+          enable_youspeed: ${{ inputs.enable_youspeed }}
+          enable_yougetcaption: ${{ inputs.enable_yougetcaption }}
+          enable_youfixplaybackissues: ${{ inputs.enable_youfixplaybackissues }}
           cache_youpip_hit: ${{ steps.cache_tweaks_step.outputs.cache_youpip_hit }}
           cache_ytuhd_hit: ${{ steps.cache_tweaks_step.outputs.cache_ytuhd_hit }}
           cache_ryd_hit: ${{ steps.cache_tweaks_step.outputs.cache_ryd_hit }}
@@ -343,7 +422,13 @@ jobs:
           cache_yticons_hit: ${{ steps.cache_tweaks_step.outputs.cache_yticons_hit }}
           cache_demc_hit: ${{ steps.cache_tweaks_step.outputs.cache_demc_hit }}
           cache_gonerino_hit: ${{ steps.cache_tweaks_step.outputs.cache_gonerino_hit }}
+          cache_autoflex_hit: ${{ steps.cache_tweaks_step.outputs.cache_autoflex_hit }}
           cache_ytvo_hit: ${{ steps.cache_tweaks_step.outputs.cache_ytvo_hit }}
+          cache_youmute_hit: ${{ steps.cache_tweaks_step.outputs.cache_youmute_hit }}
+          cache_youloop_hit: ${{ steps.cache_tweaks_step.outputs.cache_youloop_hit }}
+          cache_youspeed_hit: ${{ steps.cache_tweaks_step.outputs.cache_youspeed_hit }}
+          cache_yougetcaption_hit: ${{ steps.cache_tweaks_step.outputs.cache_yougetcaption_hit }}
+          cache_yfpi_hit: ${{ steps.cache_tweaks_step.outputs.cache_yfpi_hit }}
           theos_path: ${{ github.workspace }}/theos
           workspace: ${{ github.workspace }}
 
@@ -415,7 +500,7 @@ jobs:
           cyan -i youtube.ipa -o YTPlusYTweaks_${{ steps.ytlite_version.outputs.version }}_SDK${{ inputs.sdk_version }}_v${{ steps.app_version.outputs.version }}.ipa -uwef $tweaks -n "${{ inputs.display_name }}" -b ${{ inputs.bundle_id }}
 
       - name: Upload to GitHub Releases
-        uses: softprops/action-gh-release@v2.0.1
+        uses: softprops/action-gh-release@v3.0.1
         with:
           tag_name: ytp-${{ github.run_number }}
           name: YTPlusYTweaks_${{ steps.ytlite_version.outputs.version }}_SDK${{ inputs.sdk_version }}_v${{ steps.app_version.outputs.version }} (${{ github.run_number }})

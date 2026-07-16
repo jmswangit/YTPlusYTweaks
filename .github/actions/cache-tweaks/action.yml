@@ -21,6 +21,18 @@ inputs:
     required: true
   enable_gonerino:
     required: true
+  enable_autoflex:
+    required: true
+  enable_youmute:
+    required: true
+  enable_youloop:
+    required: true
+  enable_youspeed:
+    required: true
+  enable_yougetcaption:
+    required: true
+  enable_youfixplaybackissues:
+    required: true
   sdk_version:
     required: true
   youpip_commit:
@@ -43,7 +55,21 @@ inputs:
     required: false
   gonerino_commit:
     required: false
+  autoflex_commit:
+    required: false
+  flex_commit:
+    required: false
   ytvo_commit:
+    required: false
+  youmute_commit:
+    required: false
+  youloop_commit:
+    required: false
+  youspeed_commit:
+    required: false
+  yougetcaption_commit:
+    required: false
+  youfixplaybackissues_commit:
     required: false
 
 outputs:
@@ -77,9 +103,27 @@ outputs:
   cache_gonerino_hit:
     description: "Cache hit status for Gonerino"
     value: ${{ steps.cache_gonerino.outputs.cache-hit }}
+  cache_autoflex_hit:
+    description: "Cache hit status for AutoFLEX"
+    value: ${{ steps.cache_autoflex.outputs.cache-hit }}
   cache_ytvo_hit:
     description: "Cache hit status for YTVideoOverlay"
     value: ${{ steps.cache_ytvo.outputs.cache-hit }}
+  cache_youmute_hit:
+    description: "Cache hit status for YouMute"
+    value: ${{ steps.cache_youmute.outputs.cache-hit }}
+  cache_youloop_hit:
+    description: "Cache hit status for YouLoop"
+    value: ${{ steps.cache_youloop.outputs.cache-hit }}
+  cache_youspeed_hit:
+    description: "Cache hit status for YouSpeed"
+    value: ${{ steps.cache_youspeed.outputs.cache-hit }}
+  cache_yougetcaption_hit:
+    description: "Cache hit status for YouGetCaption"
+    value: ${{ steps.cache_yougetcaption.outputs.cache-hit }}
+  cache_yfpi_hit:
+    description: "Cache hit status for YouFixPlaybackIssues"
+    value: ${{ steps.cache_yfpi.outputs.cache-hit }}
 
 runs:
   using: "composite"
@@ -87,7 +131,7 @@ runs:
     - name: Cache YouPiP
       if: inputs.enable_youpip == 'true'
       id: cache_youpip
-      uses: actions/cache@v4
+      uses: actions/cache@v6.1.0
       with:
         path: youpip.deb
         key: youpip-${{ inputs.youpip_commit }}-sdk${{ inputs.sdk_version }}
@@ -95,7 +139,7 @@ runs:
     - name: Cache YTUHD
       if: inputs.enable_ytuhd == 'true'
       id: cache_ytuhd
-      uses: actions/cache@v4
+      uses: actions/cache@v6.1.0
       with:
         path: ytuhd.deb
         key: ytuhd-${{ inputs.ytuhd_commit }}-sdk${{ inputs.sdk_version }}
@@ -103,7 +147,7 @@ runs:
     - name: Cache Return YouTube Dislikes
       if: inputs.enable_ryd == 'true'
       id: cache_ryd
-      uses: actions/cache@v4
+      uses: actions/cache@v6.1.0
       with:
         path: ryd.deb
         key: ryd-${{ inputs.ryd_commit }}-sdk${{ inputs.sdk_version }}
@@ -111,7 +155,7 @@ runs:
     - name: Cache YouGroupSettings
       if: inputs.enable_yougroupsettings == 'true'
       id: cache_ygs
-      uses: actions/cache@v4
+      uses: actions/cache@v6.1.0
       with:
         path: ygs.deb
         key: ygs-${{ inputs.ygs_commit }}-sdk${{ inputs.sdk_version }}
@@ -119,7 +163,7 @@ runs:
     - name: Cache YouQuality
       if: inputs.enable_yq == 'true'
       id: cache_yq
-      uses: actions/cache@v4
+      uses: actions/cache@v6.1.0
       with:
         path: yq.deb
         key: yq-${{ inputs.yq_commit }}-sdk${{ inputs.sdk_version }}
@@ -127,7 +171,7 @@ runs:
     - name: Cache YTABConfig
       if: inputs.enable_ytabconfig == 'true'
       id: cache_yabc
-      uses: actions/cache@v4
+      uses: actions/cache@v6.1.0
       with:
         path: yabc.deb
         key: yabc-${{ inputs.yabc_commit }}-sdk${{ inputs.sdk_version }}
@@ -135,7 +179,7 @@ runs:
     - name: Cache YTweaks
       if: inputs.enable_ytweaks == 'true'
       id: cache_ytwks
-      uses: actions/cache@v4
+      uses: actions/cache@v6.1.0
       with:
         path: ytwks.deb
         key: ytwks-${{ inputs.ytwks_commit }}-sdk${{ inputs.sdk_version }}
@@ -143,7 +187,7 @@ runs:
     - name: Cache YTIcons
       if: inputs.enable_yticons == 'true'
       id: cache_yticons
-      uses: actions/cache@v4
+      uses: actions/cache@v6.1.0
       with:
         path: yticons.deb
         key: yticons-${{ inputs.yticons_commit }}-sdk${{ inputs.sdk_version }}
@@ -151,7 +195,7 @@ runs:
     - name: Cache DontEatMyContent
       if: inputs.enable_demc == 'true'
       id: cache_demc
-      uses: actions/cache@v4
+      uses: actions/cache@v6.1.0
       with:
         path: demc.deb
         key: demc-${{ inputs.demc_commit }}-sdk${{ inputs.sdk_version }}
@@ -159,15 +203,63 @@ runs:
     - name: Cache Gonerino
       if: inputs.enable_gonerino == 'true'
       id: cache_gonerino
-      uses: actions/cache@v4
+      uses: actions/cache@v6.1.0
       with:
         path: gonerino.deb
         key: gonerino-${{ inputs.gonerino_commit }}-sdk${{ inputs.sdk_version }}
 
+    - name: Cache AutoFLEX
+      if: inputs.enable_autoflex == 'true'
+      id: cache_autoflex
+      uses: actions/cache@v6.1.0
+      with:
+        path: autoflex.deb
+        key: autoflex-${{ inputs.autoflex_commit }}-flex${{ inputs.flex_commit }}-sdk${{ inputs.sdk_version }}
+
     - name: Cache YTVideoOverlay
       if: inputs.enable_yq == 'true' || inputs.enable_youpip == 'true'
       id: cache_ytvo
-      uses: actions/cache@v4
+      uses: actions/cache@v6.1.0
       with:
         path: ytvo.deb
         key: ytvo-${{ inputs.ytvo_commit }}-sdk${{ inputs.sdk_version }}
+
+    - name: Cache YouMute
+      if: inputs.enable_youmute == 'true'
+      id: cache_youmute
+      uses: actions/cache@v6.1.0
+      with:
+        path: youmute.deb
+        key: youmute-${{ inputs.youmute_commit }}-sdk${{ inputs.sdk_version }}
+
+    - name: Cache YouLoop
+      if: inputs.enable_youloop == 'true'
+      id: cache_youloop
+      uses: actions/cache@v6.1.0
+      with:
+        path: youloop.deb
+        key: youloop-${{ inputs.youloop_commit }}-sdk${{ inputs.sdk_version }}
+
+    - name: Cache YouSpeed
+      if: inputs.enable_youspeed == 'true'
+      id: cache_youspeed
+      uses: actions/cache@v6.1.0
+      with:
+        path: youspeed.deb
+        key: youspeed-${{ inputs.youspeed_commit }}-sdk${{ inputs.sdk_version }}
+
+    - name: Cache YouGetCaption
+      if: inputs.enable_yougetcaption == 'true'
+      id: cache_yougetcaption
+      uses: actions/cache@v6.1.0
+      with:
+        path: yougetcaption.deb
+        key: yougetcaption-${{ inputs.yougetcaption_commit }}-sdk${{ inputs.sdk_version }}
+
+    - name: Cache YouFixPlaybackIssues
+      if: inputs.enable_youfixplaybackissues == 'true'
+      id: cache_yfpi
+      uses: actions/cache@v6.1.0
+      with:
+        path: youfixplaybackissues.deb
+        key: yfpi-${{ inputs.youfixplaybackissues_commit }}-sdk${{ inputs.sdk_version }}

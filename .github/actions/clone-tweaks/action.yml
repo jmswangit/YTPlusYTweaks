@@ -21,6 +21,18 @@ inputs:
     required: true
   enable_gonerino:
     required: true
+  enable_autoflex:
+    required: true
+  enable_youmute:
+    required: true
+  enable_youloop:
+    required: true
+  enable_youspeed:
+    required: true
+  enable_yougetcaption:
+    required: true
+  enable_youfixplaybackissues:
+    required: true
   cache_youpip_hit:
     required: true
   cache_ytuhd_hit:
@@ -41,7 +53,19 @@ inputs:
     required: true
   cache_gonerino_hit:
     required: true
+  cache_autoflex_hit:
+    required: true
   cache_ytvo_hit:
+    required: true
+  cache_youmute_hit:
+    required: true
+  cache_youloop_hit:
+    required: true
+  cache_youspeed_hit:
+    required: true
+  cache_yougetcaption_hit:
+    required: true
+  cache_yfpi_hit:
     required: true
   workspace:
     required: true
@@ -63,6 +87,7 @@ runs:
         ENABLE_YTICONS: ${{ inputs.enable_yticons }}
         ENABLE_DEMC: ${{ inputs.enable_demc }}
         ENABLE_GONERINO: ${{ inputs.enable_gonerino }}
+        ENABLE_AUTOFLEX: ${{ inputs.enable_autoflex }}
         CACHE_YOUPIP_HIT: ${{ inputs.cache_youpip_hit }}
         CACHE_YTUHD_HIT: ${{ inputs.cache_ytuhd_hit }}
         CACHE_RYD_HIT: ${{ inputs.cache_ryd_hit }}
@@ -73,14 +98,25 @@ runs:
         CACHE_YTICONS_HIT: ${{ inputs.cache_yticons_hit }}
         CACHE_DEMC_HIT: ${{ inputs.cache_demc_hit }}
         CACHE_GONERINO_HIT: ${{ inputs.cache_gonerino_hit }}
+        CACHE_AUTOFLEX_HIT: ${{ inputs.cache_autoflex_hit }}
         CACHE_YTVO_HIT: ${{ inputs.cache_ytvo_hit }}
+        ENABLE_YOUMUTE: ${{ inputs.enable_youmute }}
+        ENABLE_YOULOOP: ${{ inputs.enable_youloop }}
+        ENABLE_YOUSPEED: ${{ inputs.enable_youspeed }}
+        ENABLE_YOUGETCAPTION: ${{ inputs.enable_yougetcaption }}
+        CACHE_YOUMUTE_HIT: ${{ inputs.cache_youmute_hit }}
+        CACHE_YOULOOP_HIT: ${{ inputs.cache_youloop_hit }}
+        CACHE_YOUSPEED_HIT: ${{ inputs.cache_youspeed_hit }}
+        CACHE_YOUGETCAPTION_HIT: ${{ inputs.cache_yougetcaption_hit }}
+        ENABLE_YOUFIXPLAYBACKISSUES: ${{ inputs.enable_youfixplaybackissues }}
+        CACHE_YFPI_HIT: ${{ inputs.cache_yfpi_hit }}
       run: |
         cd ${{ inputs.workspace }}
         
         # enable_var|cache_var|repo_url|display_name|extra_flags
         declare -a tweaks=(
           "ENABLE_YOUPIP|CACHE_YOUPIP_HIT|https://github.com/PoomSmart/YouPiP.git|YouPiP|"
-          "ENABLE_YTUHD|CACHE_YTUHD_HIT|https://github.com/Tonwalter888/YTUHD.git|YTUHD|"
+          "ENABLE_YTUHD|CACHE_YTUHD_HIT|https://github.com/PoomSmart/YTUHD.git|YTUHD|--recurse-submodules --shallow-submodules"
           "ENABLE_RYD|CACHE_RYD_HIT|https://github.com/PoomSmart/Return-YouTube-Dislikes.git|Return-YouTube-Dislikes|"
           "ENABLE_YOUGROUPSETTINGS|CACHE_YGS_HIT|https://github.com/fosterbarnes/YouGroupSettings.git|YouGroupSettings|"
           "ENABLE_YQ|CACHE_YQ_HIT|https://github.com/PoomSmart/YouQuality.git|YouQuality|"
@@ -88,14 +124,19 @@ runs:
           "ENABLE_YTWEAKS|CACHE_YTWKS_HIT|https://github.com/fosterbarnes/YTweaks.git|YTweaks|"
           "ENABLE_YTICONS|CACHE_YTICONS_HIT|https://github.com/PoomSmart/YTIcons.git|YTIcons|"
           "ENABLE_DEMC|CACHE_DEMC_HIT|https://github.com/therealFoxster/DontEatMyContent.git|DontEatMyContent|--recurse-submodules"
-          "ENABLE_GONERINO|CACHE_GONERINO_HIT|https://github.com/castdrian/Gonerino.git|Gonerino|"
+          "ENABLE_GONERINO|CACHE_GONERINO_HIT|https://github.com/fosterbarnes/YGonerino.git|Gonerino|"
+          "ENABLE_AUTOFLEX|CACHE_AUTOFLEX_HIT|https://github.com/pwnless/AutoFLEX.git|AutoFLEX|"
+          "ENABLE_YOUMUTE|CACHE_YOUMUTE_HIT|https://github.com/PoomSmart/YouMute.git|YouMute|"
+          "ENABLE_YOULOOP|CACHE_YOULOOP_HIT|https://github.com/bhackel/YouLoop.git|YouLoop|"
+          "ENABLE_YOUSPEED|CACHE_YOUSPEED_HIT|https://github.com/PoomSmart/YouSpeed.git|YouSpeed|"
+          "ENABLE_YOUGETCAPTION|CACHE_YOUGETCAPTION_HIT|https://github.com/PoomSmart/YouGetCaption.git|YouGetCaption|"
         )
         
         for tweak in "${tweaks[@]}"; do
           IFS='|' read -r enable_var cache_var repo_url display_name extra_flags <<< "$tweak"
           if [ "${!enable_var}" = "true" ] && [ "${!cache_var}" != "true" ]; then
             echo "Cloning $display_name..."
-            git clone --quiet --depth=1 $extra_flags "$repo_url"
+            git clone --quiet --depth=1 $extra_flags "$repo_url" "$display_name"
           fi
         done
         
@@ -107,6 +148,21 @@ runs:
             git clone --quiet --depth=1 https://github.com/PoomSmart/YTVideoOverlay.git
           else
             echo "YTVideoOverlay already exists, skipping clone"
+          fi
+        fi
+        
+        # Handle YouFixPlaybackIssues (pins to a specific commit and subdirectory)
+        if [ "$ENABLE_YOUFIXPLAYBACKISSUES" = "true" ] && [ "$CACHE_YFPI_HIT" != "true" ]; then
+          if [ ! -d "YouFixPlaybackIssues" ]; then
+            echo "Cloning YouFixPlaybackIssues..."
+            git clone --quiet https://github.com/AppropriateNet2928/YTLitePlusRenewed.git YouFixPlaybackIssues_repo
+            cd YouFixPlaybackIssues_repo
+            git checkout --quiet adec498be498fb535f5712a1df84ec349f6db93a
+            cd ..
+            mv YouFixPlaybackIssues_repo/YouFixPlaybackIssues YouFixPlaybackIssues
+            rm -rf YouFixPlaybackIssues_repo
+          else
+            echo "YouFixPlaybackIssues already exists, skipping clone"
           fi
         fi
 

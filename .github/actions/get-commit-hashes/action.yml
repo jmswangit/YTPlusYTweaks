@@ -21,6 +21,18 @@ inputs:
     required: true
   enable_gonerino:
     required: true
+  enable_autoflex:
+    required: true
+  enable_youmute:
+    required: true
+  enable_youloop:
+    required: true
+  enable_youspeed:
+    required: true
+  enable_yougetcaption:
+    required: true
+  enable_youfixplaybackissues:
+    required: true
 
 outputs:
   youpip:
@@ -53,9 +65,30 @@ outputs:
   gonerino:
     description: "Gonerino commit hash"
     value: ${{ steps.get_commits.outputs.gonerino }}
+  autoflex:
+    description: "AutoFLEX commit hash"
+    value: ${{ steps.get_commits.outputs.autoflex }}
+  flex:
+    description: "FLEX commit hash"
+    value: ${{ steps.get_commits.outputs.flex }}
   ytvo:
     description: "YTVideoOverlay commit hash"
     value: ${{ steps.get_commits.outputs.ytvo }}
+  youmute:
+    description: "YouMute commit hash"
+    value: ${{ steps.get_commits.outputs.youmute }}
+  youloop:
+    description: "YouLoop commit hash"
+    value: ${{ steps.get_commits.outputs.youloop }}
+  youspeed:
+    description: "YouSpeed commit hash"
+    value: ${{ steps.get_commits.outputs.youspeed }}
+  yougetcaption:
+    description: "YouGetCaption commit hash"
+    value: ${{ steps.get_commits.outputs.yougetcaption }}
+  youfixplaybackissues:
+    description: "YouFixPlaybackIssues commit hash"
+    value: ${{ steps.get_commits.outputs.youfixplaybackissues }}
   cyan:
     description: "Cyan commit hash"
     value: ${{ steps.get_commits.outputs.cyan }}
@@ -80,6 +113,12 @@ runs:
         ENABLE_YTICONS: ${{ inputs.enable_yticons }}
         ENABLE_DEMC: ${{ inputs.enable_demc }}
         ENABLE_GONERINO: ${{ inputs.enable_gonerino }}
+        ENABLE_AUTOFLEX: ${{ inputs.enable_autoflex }}
+        ENABLE_YOUMUTE: ${{ inputs.enable_youmute }}
+        ENABLE_YOULOOP: ${{ inputs.enable_youloop }}
+        ENABLE_YOUSPEED: ${{ inputs.enable_youspeed }}
+        ENABLE_YOUGETCAPTION: ${{ inputs.enable_yougetcaption }}
+        ENABLE_YOUFIXPLAYBACKISSUES: ${{ inputs.enable_youfixplaybackissues }}
       run: |
         cd ${{ github.workspace }}
         
@@ -99,7 +138,7 @@ runs:
         # env_var|output_key|repo_url|display_name
         declare -a tweaks=(
           "ENABLE_YOUPIP|youpip|https://github.com/PoomSmart/YouPiP.git|YouPiP"
-          "ENABLE_YTUHD|ytuhd|https://github.com/Tonwalter888/YTUHD.git|YTUHD"
+          "ENABLE_YTUHD|ytuhd|https://github.com/PoomSmart/YTUHD.git|YTUHD"
           "ENABLE_RYD|ryd|https://github.com/PoomSmart/Return-YouTube-Dislikes.git|Return-YouTube-Dislikes"
           "ENABLE_YOUGROUPSETTINGS|ygs|https://github.com/fosterbarnes/YouGroupSettings.git|YouGroupSettings"
           "ENABLE_YQ|yq|https://github.com/PoomSmart/YouQuality.git|YouQuality"
@@ -107,7 +146,12 @@ runs:
           "ENABLE_YTWEAKS|ytwks|https://github.com/fosterbarnes/YTweaks.git|YTweaks"
           "ENABLE_YTICONS|yticons|https://github.com/PoomSmart/YTIcons.git|YTIcons"
           "ENABLE_DEMC|demc|https://github.com/therealFoxster/DontEatMyContent.git|DontEatMyContent"
-          "ENABLE_GONERINO|gonerino|https://github.com/castdrian/Gonerino.git|Gonerino"
+          "ENABLE_GONERINO|gonerino|https://github.com/fosterbarnes/YGonerino.git|Gonerino"
+          "ENABLE_AUTOFLEX|autoflex|https://github.com/pwnless/AutoFLEX.git|AutoFLEX"
+          "ENABLE_YOUMUTE|youmute|https://github.com/PoomSmart/YouMute.git|YouMute"
+          "ENABLE_YOULOOP|youloop|https://github.com/bhackel/YouLoop.git|YouLoop"
+          "ENABLE_YOUSPEED|youspeed|https://github.com/PoomSmart/YouSpeed.git|YouSpeed"
+          "ENABLE_YOUGETCAPTION|yougetcaption|https://github.com/PoomSmart/YouGetCaption.git|YouGetCaption"
         )
         
         for tweak in "${tweaks[@]}"; do
@@ -119,9 +163,22 @@ runs:
           fi
         done
         
+        # AutoFLEX bundles FLEX sources at build time
+        if [ "$ENABLE_AUTOFLEX" = "true" ]; then
+          FLEX_COMMIT=$(get_commit_hash "https://github.com/FLEXTool/FLEX.git")
+          echo "flex=$FLEX_COMMIT" >> $GITHUB_OUTPUT
+          echo "FLEX commit: $FLEX_COMMIT"
+        fi
+        
         # Handle conditional YTVideoOverlay
         if [ "$ENABLE_YQ" = "true" ] || [ "$ENABLE_YOUPIP" = "true" ]; then
           YTVO_COMMIT=$(get_commit_hash "https://github.com/PoomSmart/YTVideoOverlay.git")
           echo "ytvo=$YTVO_COMMIT" >> $GITHUB_OUTPUT
           echo "YTVideoOverlay commit: $YTVO_COMMIT"
+        fi
+        
+        # Handle YouFixPlaybackIssues (pins to a specific commit)
+        if [ "$ENABLE_YOUFIXPLAYBACKISSUES" = "true" ]; then
+          echo "youfixplaybackissues=adec498" >> $GITHUB_OUTPUT
+          echo "YouFixPlaybackIssues commit: adec498"
         fi
