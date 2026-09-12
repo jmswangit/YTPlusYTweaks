@@ -33,6 +33,8 @@ inputs:
     required: true
   enable_youfixplaybackissues:
     required: true
+  enable_volumeboost:
+    required: true
   sdk_version:
     required: true
   youpip_commit:
@@ -70,6 +72,8 @@ inputs:
   yougetcaption_commit:
     required: false
   youfixplaybackissues_commit:
+    required: false
+  volumeboost_commit:
     required: false
 
 outputs:
@@ -124,6 +128,9 @@ outputs:
   cache_yfpi_hit:
     description: "Cache hit status for YouFixPlaybackIssues"
     value: ${{ steps.cache_yfpi.outputs.cache-hit }}
+  cache_volumeboost_hit:
+    description: "Cache hit status for VolumeBoostOverlay"
+    value: ${{ steps.cache_volumeboost.outputs.cache-hit }}
 
 runs:
   using: "composite"
@@ -217,7 +224,7 @@ runs:
         key: autoflex-${{ inputs.autoflex_commit }}-flex${{ inputs.flex_commit }}-sdk${{ inputs.sdk_version }}
 
     - name: Cache YTVideoOverlay
-      if: inputs.enable_yq == 'true' || inputs.enable_youpip == 'true'
+      if: inputs.enable_yq == 'true' || inputs.enable_youpip == 'true' || inputs.enable_volumeboost == 'true'
       id: cache_ytvo
       uses: actions/cache@v6.1.0
       with:
@@ -263,3 +270,11 @@ runs:
       with:
         path: youfixplaybackissues.deb
         key: yfpi-${{ inputs.youfixplaybackissues_commit }}-sdk${{ inputs.sdk_version }}
+
+    - name: Cache VolumeBoostOverlay
+      if: inputs.enable_volumeboost == 'true'
+      id: cache_volumeboost
+      uses: actions/cache@v6.1.0
+      with:
+        path: volumeboost.deb
+        key: volumeboost-${{ inputs.volumeboost_commit }}-sdk${{ inputs.sdk_version }}

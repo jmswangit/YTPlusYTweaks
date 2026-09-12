@@ -33,6 +33,8 @@ inputs:
     required: true
   enable_youfixplaybackissues:
     required: true
+  enable_volumeboost:
+    required: true
   cache_youpip_hit:
     required: true
   cache_ytuhd_hit:
@@ -66,6 +68,8 @@ inputs:
   cache_yougetcaption_hit:
     required: true
   cache_yfpi_hit:
+    required: true
+  cache_volumeboost_hit:
     required: true
   workspace:
     required: true
@@ -110,6 +114,8 @@ runs:
         CACHE_YOUGETCAPTION_HIT: ${{ inputs.cache_yougetcaption_hit }}
         ENABLE_YOUFIXPLAYBACKISSUES: ${{ inputs.enable_youfixplaybackissues }}
         CACHE_YFPI_HIT: ${{ inputs.cache_yfpi_hit }}
+        ENABLE_VOLUMEBOOST: ${{ inputs.enable_volumeboost }}
+        CACHE_VOLUMEBOOST_HIT: ${{ inputs.cache_volumeboost_hit }}
       run: |
         cd ${{ inputs.workspace }}
         
@@ -130,6 +136,7 @@ runs:
           "ENABLE_YOULOOP|CACHE_YOULOOP_HIT|https://github.com/bhackel/YouLoop.git|YouLoop|"
           "ENABLE_YOUSPEED|CACHE_YOUSPEED_HIT|https://github.com/PoomSmart/YouSpeed.git|YouSpeed|"
           "ENABLE_YOUGETCAPTION|CACHE_YOUGETCAPTION_HIT|https://github.com/PoomSmart/YouGetCaption.git|YouGetCaption|"
+          "ENABLE_VOLUMEBOOST|CACHE_VOLUMEBOOST_HIT|https://github.com/jmswangit/VolumeBoostOverlay.git|VolumeBoostOverlay|"
         )
         
         for tweak in "${tweaks[@]}"; do
@@ -141,8 +148,8 @@ runs:
         done
         
         # Handle conditional YTVideoOverlay
-        # Always clone YTVideoOverlay if YouQuality or YouPiP is enabled, they depend on Header.h file at build time
-        if [ "$ENABLE_YQ" = "true" ] || [ "$ENABLE_YOUPIP" = "true" ]; then
+        # Always clone YTVideoOverlay if YouQuality, YouPiP or VolumeBoostOverlay is enabled, they depend on Header.h file at build time
+        if [ "$ENABLE_YQ" = "true" ] || [ "$ENABLE_YOUPIP" = "true" ] || [ "$ENABLE_VOLUMEBOOST" = "true" ]; then
           if [ ! -d "YTVideoOverlay" ]; then
             echo "Cloning YTVideoOverlay..."
             git clone --quiet --depth=1 https://github.com/PoomSmart/YTVideoOverlay.git

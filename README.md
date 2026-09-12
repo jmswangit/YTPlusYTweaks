@@ -32,6 +32,7 @@ Added tweaks:
 - [YouLoop](https://github.com/bhackel/YouLoop)
 - [YouSpeed](https://github.com/PoomSmart/YouSpeed)
 - [YouGetCaption](https://github.com/PoomSmart/YouGetCaption)
+- [VolumeBoostOverlay](https://github.com/jmswangit/VolumeBoostOverlay) — fork of [VolumeBoostYT](https://github.com/irum0320/VolumeBoostYT)
 
 Original repo: https://github.com/dayanch96/YTLite
 
@@ -343,6 +344,12 @@ Fill out an [issue form](https://github.com/fosterbarnes/YTPlusYTweaks/issues) w
 </details>
 
 <details>
+  <summary>VolumeBoostOverlay</summary>
+  <p>Adds an independent volume boost control to the video overlay, adjustable from 0% to 2000% without touching the system volume. A fork of <a href="https://github.com/irum0320/VolumeBoostYT">VolumeBoostYT</a> reworked as a <a href="https://github.com/PoomSmart/YTVideoOverlay">YTVideoOverlay</a> plugin.
+  <p>Source code and additional information are available <a href="https://github.com/jmswangit/VolumeBoostOverlay">in jmswangit's GitHub repository</a>.</p>
+</details>
+
+<details>
   <summary>YouFixPlaybackIssues</summary>
   <p>Fixes the notorious playback issue by presenting to YouTube servers as an Oculus Quest, bypassing the iOS sideload check. Developed by <a href="https://github.com/AppropriateNet2928">AppropriateNet2928</a> with the help of <a href="https://github.com/Tonwalter888">Tonwalter888</a>
   <p>Source code and additional information are available <a href="https://github.com/AppropriateNet2928/YTLitePlusRenewed/tree/main/YouFixPlaybackIssues">in AppropriateNet2928's GitHub repository</a>.</p>
@@ -356,6 +363,8 @@ Thank you to everyone that made this project possible! This project would not ex
 [PoomSmart](https://github.com/PoomSmart) - YouPiP, YTUHD, Return YouTube Dislikes, YouQuality, YTABConfig, YTIcons, YouGroupSettings, YouMute, YouSpeed, YouGetCaption
 
 [therealFoxster](https://github.com/therealFoxster) - DontEatMyContent
+
+[irum0320](https://github.com/irum0320) - VolumeBoostYT (base for VolumeBoostOverlay)
 
 [castdrian](https://github.com/castdrian/Gonerino) - Gonerino
 
