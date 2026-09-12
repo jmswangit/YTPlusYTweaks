@@ -37,6 +37,8 @@ inputs:
     required: true
   enable_speedoverlay:
     required: true
+  enable_pdstm:
+    required: true
 
 outputs:
   youpip:
@@ -99,6 +101,9 @@ outputs:
   speedoverlay:
     description: "SpeedOverlay commit hash"
     value: ${{ steps.get_commits.outputs.speedoverlay }}
+  pdstm:
+    description: "PleaseDontStopTheMusic commit hash"
+    value: ${{ steps.get_commits.outputs.pdstm }}
   cyan:
     description: "Cyan commit hash"
     value: ${{ steps.get_commits.outputs.cyan }}
@@ -131,6 +136,7 @@ runs:
         ENABLE_YOUFIXPLAYBACKISSUES: ${{ inputs.enable_youfixplaybackissues }}
         ENABLE_VOLUMEBOOST: ${{ inputs.enable_volumeboost }}
         ENABLE_SPEEDOVERLAY: ${{ inputs.enable_speedoverlay }}
+        ENABLE_PDSTM: ${{ inputs.enable_pdstm }}
       run: |
         cd ${{ github.workspace }}
         
@@ -166,6 +172,7 @@ runs:
           "ENABLE_YOUGETCAPTION|yougetcaption|https://github.com/PoomSmart/YouGetCaption.git|YouGetCaption"
           "ENABLE_VOLUMEBOOST|volumeboost|https://github.com/jmswangit/VolumeBoostOverlay.git|VolumeBoostOverlay"
           "ENABLE_SPEEDOVERLAY|speedoverlay|https://github.com/jmswangit/SpeedOverlay.git|SpeedOverlay"
+          "ENABLE_PDSTM|pdstm|https://github.com/mikey820/PleaseDontStopTheMusic.git|PleaseDontStopTheMusic"
         )
         
         for tweak in "${tweaks[@]}"; do

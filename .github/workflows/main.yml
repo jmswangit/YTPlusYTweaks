@@ -94,6 +94,12 @@ on:
         required: true
         default: true
 
+      enable_pdstm:
+        description: "PleaseDontStopTheMusic (keep background music playing)"
+        type: boolean
+        required: true
+        default: true
+
       enable_yougroupsettings:
         description: "Group Tweak Settings (YouGroupSettings)"
         type: boolean
@@ -176,7 +182,7 @@ jobs:
       - name: Hide sensitive inputs
         uses: levibostian/action-hide-sensitive-inputs@v1
         with:
-          exclude_inputs: bundle_id,display_name,enable_demc,enable_ryd,enable_youpip,enable_yq,enable_ytabconfig,enable_ytweaks,enable_yticons,enable_yougroupsettings,enable_ytuhd,enable_gonerino,enable_autoflex,enable_youmute,enable_youloop,enable_youspeed,enable_yougetcaption,enable_youfixplaybackissues,enable_volumeboost,enable_speedoverlay,info_note,tweak_version,sdk_version
+          exclude_inputs: bundle_id,display_name,enable_demc,enable_ryd,enable_youpip,enable_yq,enable_ytabconfig,enable_ytweaks,enable_yticons,enable_yougroupsettings,enable_ytuhd,enable_gonerino,enable_autoflex,enable_youmute,enable_youloop,enable_youspeed,enable_yougetcaption,enable_youfixplaybackissues,enable_volumeboost,enable_speedoverlay,enable_pdstm,info_note,tweak_version,sdk_version
 
       - name: Check if any tweaks are enabled
         id: check_tweaks
@@ -198,7 +204,8 @@ jobs:
              [ "${{ inputs.enable_yougetcaption }}" = "true" ] || \
              [ "${{ inputs.enable_youfixplaybackissues }}" = "true" ] || \
              [ "${{ inputs.enable_volumeboost }}" = "true" ] || \
-             [ "${{ inputs.enable_speedoverlay }}" = "true" ]; then
+             [ "${{ inputs.enable_speedoverlay }}" = "true" ] || \
+             [ "${{ inputs.enable_pdstm }}" = "true" ]; then
             echo "enabled=true" >> $GITHUB_OUTPUT
             echo "Tweaks are enabled"
           else
@@ -228,6 +235,7 @@ jobs:
           enable_youfixplaybackissues: ${{ steps.check_tweaks.outputs.enabled == 'true' && inputs.enable_youfixplaybackissues || 'false' }}
           enable_volumeboost: ${{ steps.check_tweaks.outputs.enabled == 'true' && inputs.enable_volumeboost || 'false' }}
           enable_speedoverlay: ${{ steps.check_tweaks.outputs.enabled == 'true' && inputs.enable_speedoverlay || 'false' }}
+          enable_pdstm: ${{ steps.check_tweaks.outputs.enabled == 'true' && inputs.enable_pdstm || 'false' }}
 
       - name: Download and validate IPA
         run: |
@@ -351,6 +359,7 @@ jobs:
           enable_youfixplaybackissues: ${{ inputs.enable_youfixplaybackissues }}
           enable_volumeboost: ${{ inputs.enable_volumeboost }}
           enable_speedoverlay: ${{ inputs.enable_speedoverlay }}
+          enable_pdstm: ${{ inputs.enable_pdstm }}
           sdk_version: ${{ inputs.sdk_version }}
           youpip_commit: ${{ steps.commit_hashes.outputs.youpip }}
           ytuhd_commit: ${{ steps.commit_hashes.outputs.ytuhd }}
@@ -372,6 +381,7 @@ jobs:
           youfixplaybackissues_commit: ${{ steps.commit_hashes.outputs.youfixplaybackissues }}
           volumeboost_commit: ${{ steps.commit_hashes.outputs.volumeboost }}
           speedoverlay_commit: ${{ steps.commit_hashes.outputs.speedoverlay }}
+          pdstm_commit: ${{ steps.commit_hashes.outputs.pdstm }}
 
       - name: Clone tweaks
         if: steps.check_tweaks.outputs.enabled == 'true'
@@ -395,6 +405,7 @@ jobs:
           enable_youfixplaybackissues: ${{ inputs.enable_youfixplaybackissues }}
           enable_volumeboost: ${{ inputs.enable_volumeboost }}
           enable_speedoverlay: ${{ inputs.enable_speedoverlay }}
+          enable_pdstm: ${{ inputs.enable_pdstm }}
           cache_youpip_hit: ${{ steps.cache_tweaks_step.outputs.cache_youpip_hit }}
           cache_ytuhd_hit: ${{ steps.cache_tweaks_step.outputs.cache_ytuhd_hit }}
           cache_ryd_hit: ${{ steps.cache_tweaks_step.outputs.cache_ryd_hit }}
@@ -414,6 +425,7 @@ jobs:
           cache_yfpi_hit: ${{ steps.cache_tweaks_step.outputs.cache_yfpi_hit }}
           cache_volumeboost_hit: ${{ steps.cache_tweaks_step.outputs.cache_volumeboost_hit }}
           cache_speedoverlay_hit: ${{ steps.cache_tweaks_step.outputs.cache_speedoverlay_hit }}
+          cache_pdstm_hit: ${{ steps.cache_tweaks_step.outputs.cache_pdstm_hit }}
           workspace: ${{ github.workspace }}
 
       - name: Build tweaks
@@ -438,6 +450,7 @@ jobs:
           enable_youfixplaybackissues: ${{ inputs.enable_youfixplaybackissues }}
           enable_volumeboost: ${{ inputs.enable_volumeboost }}
           enable_speedoverlay: ${{ inputs.enable_speedoverlay }}
+          enable_pdstm: ${{ inputs.enable_pdstm }}
           cache_youpip_hit: ${{ steps.cache_tweaks_step.outputs.cache_youpip_hit }}
           cache_ytuhd_hit: ${{ steps.cache_tweaks_step.outputs.cache_ytuhd_hit }}
           cache_ryd_hit: ${{ steps.cache_tweaks_step.outputs.cache_ryd_hit }}
@@ -457,6 +470,7 @@ jobs:
           cache_yfpi_hit: ${{ steps.cache_tweaks_step.outputs.cache_yfpi_hit }}
           cache_volumeboost_hit: ${{ steps.cache_tweaks_step.outputs.cache_volumeboost_hit }}
           cache_speedoverlay_hit: ${{ steps.cache_tweaks_step.outputs.cache_speedoverlay_hit }}
+          cache_pdstm_hit: ${{ steps.cache_tweaks_step.outputs.cache_pdstm_hit }}
           theos_path: ${{ github.workspace }}/theos
           workspace: ${{ github.workspace }}
 

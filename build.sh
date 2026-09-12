@@ -31,6 +31,7 @@ TWEAKS=(
     "YouGetCaption|yougetcaption.deb|https://github.com/PoomSmart/YouGetCaption.git||"
     "VolumeBoostOverlay|volumeboost.deb|https://github.com/jmswangit/VolumeBoostOverlay.git||"
     "SpeedOverlay|speedoverlay.deb|https://github.com/jmswangit/SpeedOverlay.git||"
+    "PleaseDontStopTheMusic|pdstm.deb|https://github.com/mikey820/PleaseDontStopTheMusic.git||"
     "YouFixPlaybackIssues|youfixplaybackissues.deb|https://github.com/AppropriateNet2928/YTLitePlusRenewed.git|||adec498be498fb535f5712a1df84ec349f6db93a|YouFixPlaybackIssues"
 )
 
@@ -371,9 +372,10 @@ processTweak() {
     info "Building $name..."
     cd "$name"
     [[ "$name" == "YTUHD" ]] && make libvpx dav1d $makeExtra
+    [[ "$name" == "PleaseDontStopTheMusic" ]] && cd rootful
     make clean package DEBUG=0 FINALPACKAGE=1 $makeExtra
     mv packages/*.deb "$BUILD_DIR/$debName"
-    cd ..
+    if [[ "$name" == "PleaseDontStopTheMusic" ]]; then cd ../..; else cd ..; fi
 
     mkdir -p "$ROOT_DIR/deb"
     cp "$BUILD_DIR/$debName" "$ROOT_DIR/deb/${name}.deb"

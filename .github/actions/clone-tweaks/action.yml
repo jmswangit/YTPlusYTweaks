@@ -37,6 +37,8 @@ inputs:
     required: true
   enable_speedoverlay:
     required: true
+  enable_pdstm:
+    required: true
   cache_youpip_hit:
     required: true
   cache_ytuhd_hit:
@@ -74,6 +76,8 @@ inputs:
   cache_volumeboost_hit:
     required: true
   cache_speedoverlay_hit:
+    required: true
+  cache_pdstm_hit:
     required: true
   workspace:
     required: true
@@ -122,6 +126,8 @@ runs:
         CACHE_VOLUMEBOOST_HIT: ${{ inputs.cache_volumeboost_hit }}
         ENABLE_SPEEDOVERLAY: ${{ inputs.enable_speedoverlay }}
         CACHE_SPEEDOVERLAY_HIT: ${{ inputs.cache_speedoverlay_hit }}
+        ENABLE_PDSTM: ${{ inputs.enable_pdstm }}
+        CACHE_PDSTM_HIT: ${{ inputs.cache_pdstm_hit }}
       run: |
         cd ${{ inputs.workspace }}
         
@@ -144,6 +150,7 @@ runs:
           "ENABLE_YOUGETCAPTION|CACHE_YOUGETCAPTION_HIT|https://github.com/PoomSmart/YouGetCaption.git|YouGetCaption|"
           "ENABLE_VOLUMEBOOST|CACHE_VOLUMEBOOST_HIT|https://github.com/jmswangit/VolumeBoostOverlay.git|VolumeBoostOverlay|"
           "ENABLE_SPEEDOVERLAY|CACHE_SPEEDOVERLAY_HIT|https://github.com/jmswangit/SpeedOverlay.git|SpeedOverlay|"
+          "ENABLE_PDSTM|CACHE_PDSTM_HIT|https://github.com/mikey820/PleaseDontStopTheMusic.git|PleaseDontStopTheMusic|"
         )
         
         for tweak in "${tweaks[@]}"; do

@@ -37,6 +37,8 @@ inputs:
     required: true
   enable_speedoverlay:
     required: true
+  enable_pdstm:
+    required: true
   sdk_version:
     required: true
   youpip_commit:
@@ -78,6 +80,8 @@ inputs:
   volumeboost_commit:
     required: false
   speedoverlay_commit:
+    required: false
+  pdstm_commit:
     required: false
 
 outputs:
@@ -138,6 +142,9 @@ outputs:
   cache_speedoverlay_hit:
     description: "Cache hit status for SpeedOverlay"
     value: ${{ steps.cache_speedoverlay.outputs.cache-hit }}
+  cache_pdstm_hit:
+    description: "Cache hit status for PleaseDontStopTheMusic"
+    value: ${{ steps.cache_pdstm.outputs.cache-hit }}
 
 runs:
   using: "composite"
@@ -293,3 +300,11 @@ runs:
       with:
         path: speedoverlay.deb
         key: speedoverlay-${{ inputs.speedoverlay_commit }}-sdk${{ inputs.sdk_version }}
+
+    - name: Cache PleaseDontStopTheMusic
+      if: inputs.enable_pdstm == 'true'
+      id: cache_pdstm
+      uses: actions/cache@v6.1.0
+      with:
+        path: pdstm.deb
+        key: pdstm-${{ inputs.pdstm_commit }}-sdk${{ inputs.sdk_version }}

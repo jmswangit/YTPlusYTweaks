@@ -34,6 +34,7 @@ Added tweaks:
 - [YouGetCaption](https://github.com/PoomSmart/YouGetCaption)
 - [VolumeBoostOverlay](https://github.com/jmswangit/VolumeBoostOverlay) — fork of [VolumeBoostYT](https://github.com/irum0320/VolumeBoostYT)
 - [SpeedOverlay](https://github.com/jmswangit/SpeedOverlay) — replacement speed controls with a working current-speed display
+- [PleaseDontStopTheMusic](https://github.com/mikey820/PleaseDontStopTheMusic)
 
 Original repo: https://github.com/dayanch96/YTLite
 
@@ -357,6 +358,12 @@ Fill out an [issue form](https://github.com/fosterbarnes/YTPlusYTweaks/issues) w
 </details>
 
 <details>
+  <summary>PleaseDontStopTheMusic</summary>
+  <p>Prevents apps from pausing your background music by making them mix their audio instead of interrupting the primary source.
+  <p>Source code and additional information are available <a href="https://github.com/mikey820/PleaseDontStopTheMusic">in mikey820's GitHub repository</a>.</p>
+</details>
+
+<details>
   <summary>YouFixPlaybackIssues</summary>
   <p>Fixes the notorious playback issue by presenting to YouTube servers as an Oculus Quest, bypassing the iOS sideload check. Developed by <a href="https://github.com/AppropriateNet2928">AppropriateNet2928</a> with the help of <a href="https://github.com/Tonwalter888">Tonwalter888</a>
   <p>Source code and additional information are available <a href="https://github.com/AppropriateNet2928/YTLitePlusRenewed/tree/main/YouFixPlaybackIssues">in AppropriateNet2928's GitHub repository</a>.</p>
@@ -372,6 +379,8 @@ Thank you to everyone that made this project possible! This project would not ex
 [therealFoxster](https://github.com/therealFoxster) - DontEatMyContent
 
 [irum0320](https://github.com/irum0320) - VolumeBoostYT (base for VolumeBoostOverlay)
+
+[mikey820](https://github.com/mikey820) - PleaseDontStopTheMusic
 
 [castdrian](https://github.com/castdrian/Gonerino) - Gonerino
 

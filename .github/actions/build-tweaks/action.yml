@@ -37,6 +37,8 @@ inputs:
     required: true
   enable_speedoverlay:
     required: true
+  enable_pdstm:
+    required: true
   cache_youpip_hit:
     required: true
   cache_ytuhd_hit:
@@ -74,6 +76,8 @@ inputs:
   cache_volumeboost_hit:
     required: true
   cache_speedoverlay_hit:
+    required: true
+  cache_pdstm_hit:
     required: true
   theos_path:
     required: true
@@ -126,6 +130,8 @@ runs:
         CACHE_VOLUMEBOOST_HIT: ${{ inputs.cache_volumeboost_hit }}
         ENABLE_SPEEDOVERLAY: ${{ inputs.enable_speedoverlay }}
         CACHE_SPEEDOVERLAY_HIT: ${{ inputs.cache_speedoverlay_hit }}
+        ENABLE_PDSTM: ${{ inputs.enable_pdstm }}
+        CACHE_PDSTM_HIT: ${{ inputs.cache_pdstm_hit }}
       run: |
         cd ${{ inputs.workspace }}
         
@@ -148,6 +154,7 @@ runs:
           "ENABLE_YOUFIXPLAYBACKISSUES|CACHE_YFPI_HIT|YouFixPlaybackIssues|youfixplaybackissues.deb|YouFixPlaybackIssues|"
           "ENABLE_VOLUMEBOOST|CACHE_VOLUMEBOOST_HIT|VolumeBoostOverlay|volumeboost.deb|VolumeBoostOverlay|"
           "ENABLE_SPEEDOVERLAY|CACHE_SPEEDOVERLAY_HIT|SpeedOverlay|speedoverlay.deb|SpeedOverlay|"
+          "ENABLE_PDSTM|CACHE_PDSTM_HIT|PleaseDontStopTheMusic|pdstm.deb|PleaseDontStopTheMusic|"
         )
         
         for tweak in "${tweaks[@]}"; do
@@ -167,9 +174,16 @@ runs:
                 SDK_VER=$(basename "$(ls -d "$THEOS/sdks/iPhoneOS"*.sdk | head -1)" | sed 's/iPhoneOS\(.*\)\.sdk/\1/')
                 sed -i '' "s/TARGET := iphone:clang:[0-9.]*:/TARGET := iphone:clang:${SDK_VER}:/" Makefile
               fi
+              if [ "$dir_name" = "PleaseDontStopTheMusic" ]; then
+                cd rootful
+              fi
               make clean package DEBUG=0 FINALPACKAGE=1 $make_extra
               mv packages/*.deb "${{ inputs.workspace }}/$output_file"
-              cd ..
+              if [ "$dir_name" = "PleaseDontStopTheMusic" ]; then
+                cd ../..
+              else
+                cd ..
+              fi
             else
               echo "Using cached $display_name"
             fi
