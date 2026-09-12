@@ -30,6 +30,7 @@ TWEAKS=(
     "YouSpeed|youspeed.deb|https://github.com/PoomSmart/YouSpeed.git||"
     "YouGetCaption|yougetcaption.deb|https://github.com/PoomSmart/YouGetCaption.git||"
     "VolumeBoostOverlay|volumeboost.deb|https://github.com/jmswangit/VolumeBoostOverlay.git||"
+    "SpeedOverlay|speedoverlay.deb|https://github.com/jmswangit/SpeedOverlay.git||"
     "YouFixPlaybackIssues|youfixplaybackissues.deb|https://github.com/AppropriateNet2928/YTLitePlusRenewed.git|||adec498be498fb535f5712a1df84ec349f6db93a|YouFixPlaybackIssues"
 )
 

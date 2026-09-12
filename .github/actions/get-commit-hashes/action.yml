@@ -35,6 +35,8 @@ inputs:
     required: true
   enable_volumeboost:
     required: true
+  enable_speedoverlay:
+    required: true
 
 outputs:
   youpip:
@@ -94,6 +96,9 @@ outputs:
   volumeboost:
     description: "VolumeBoostOverlay commit hash"
     value: ${{ steps.get_commits.outputs.volumeboost }}
+  speedoverlay:
+    description: "SpeedOverlay commit hash"
+    value: ${{ steps.get_commits.outputs.speedoverlay }}
   cyan:
     description: "Cyan commit hash"
     value: ${{ steps.get_commits.outputs.cyan }}
@@ -125,6 +130,7 @@ runs:
         ENABLE_YOUGETCAPTION: ${{ inputs.enable_yougetcaption }}
         ENABLE_YOUFIXPLAYBACKISSUES: ${{ inputs.enable_youfixplaybackissues }}
         ENABLE_VOLUMEBOOST: ${{ inputs.enable_volumeboost }}
+        ENABLE_SPEEDOVERLAY: ${{ inputs.enable_speedoverlay }}
       run: |
         cd ${{ github.workspace }}
         
@@ -159,6 +165,7 @@ runs:
           "ENABLE_YOUSPEED|youspeed|https://github.com/PoomSmart/YouSpeed.git|YouSpeed"
           "ENABLE_YOUGETCAPTION|yougetcaption|https://github.com/PoomSmart/YouGetCaption.git|YouGetCaption"
           "ENABLE_VOLUMEBOOST|volumeboost|https://github.com/jmswangit/VolumeBoostOverlay.git|VolumeBoostOverlay"
+          "ENABLE_SPEEDOVERLAY|speedoverlay|https://github.com/jmswangit/SpeedOverlay.git|SpeedOverlay"
         )
         
         for tweak in "${tweaks[@]}"; do

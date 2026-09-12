@@ -35,6 +35,8 @@ inputs:
     required: true
   enable_volumeboost:
     required: true
+  enable_speedoverlay:
+    required: true
   cache_youpip_hit:
     required: true
   cache_ytuhd_hit:
@@ -70,6 +72,8 @@ inputs:
   cache_yfpi_hit:
     required: true
   cache_volumeboost_hit:
+    required: true
+  cache_speedoverlay_hit:
     required: true
   theos_path:
     required: true
@@ -120,6 +124,8 @@ runs:
         CACHE_YFPI_HIT: ${{ inputs.cache_yfpi_hit }}
         ENABLE_VOLUMEBOOST: ${{ inputs.enable_volumeboost }}
         CACHE_VOLUMEBOOST_HIT: ${{ inputs.cache_volumeboost_hit }}
+        ENABLE_SPEEDOVERLAY: ${{ inputs.enable_speedoverlay }}
+        CACHE_SPEEDOVERLAY_HIT: ${{ inputs.cache_speedoverlay_hit }}
       run: |
         cd ${{ inputs.workspace }}
         
@@ -141,6 +147,7 @@ runs:
           "ENABLE_YOUGETCAPTION|CACHE_YOUGETCAPTION_HIT|YouGetCaption|yougetcaption.deb|YouGetCaption|"
           "ENABLE_YOUFIXPLAYBACKISSUES|CACHE_YFPI_HIT|YouFixPlaybackIssues|youfixplaybackissues.deb|YouFixPlaybackIssues|"
           "ENABLE_VOLUMEBOOST|CACHE_VOLUMEBOOST_HIT|VolumeBoostOverlay|volumeboost.deb|VolumeBoostOverlay|"
+          "ENABLE_SPEEDOVERLAY|CACHE_SPEEDOVERLAY_HIT|SpeedOverlay|speedoverlay.deb|SpeedOverlay|"
         )
         
         for tweak in "${tweaks[@]}"; do

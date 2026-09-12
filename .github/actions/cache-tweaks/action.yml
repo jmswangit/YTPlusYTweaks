@@ -35,6 +35,8 @@ inputs:
     required: true
   enable_volumeboost:
     required: true
+  enable_speedoverlay:
+    required: true
   sdk_version:
     required: true
   youpip_commit:
@@ -74,6 +76,8 @@ inputs:
   youfixplaybackissues_commit:
     required: false
   volumeboost_commit:
+    required: false
+  speedoverlay_commit:
     required: false
 
 outputs:
@@ -131,6 +135,9 @@ outputs:
   cache_volumeboost_hit:
     description: "Cache hit status for VolumeBoostOverlay"
     value: ${{ steps.cache_volumeboost.outputs.cache-hit }}
+  cache_speedoverlay_hit:
+    description: "Cache hit status for SpeedOverlay"
+    value: ${{ steps.cache_speedoverlay.outputs.cache-hit }}
 
 runs:
   using: "composite"
@@ -278,3 +285,11 @@ runs:
       with:
         path: volumeboost.deb
         key: volumeboost-${{ inputs.volumeboost_commit }}-sdk${{ inputs.sdk_version }}
+
+    - name: Cache SpeedOverlay
+      if: inputs.enable_speedoverlay == 'true'
+      id: cache_speedoverlay
+      uses: actions/cache@v6.1.0
+      with:
+        path: speedoverlay.deb
+        key: speedoverlay-${{ inputs.speedoverlay_commit }}-sdk${{ inputs.sdk_version }}

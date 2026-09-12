@@ -33,6 +33,7 @@ Added tweaks:
 - [YouSpeed](https://github.com/PoomSmart/YouSpeed)
 - [YouGetCaption](https://github.com/PoomSmart/YouGetCaption)
 - [VolumeBoostOverlay](https://github.com/jmswangit/VolumeBoostOverlay) — fork of [VolumeBoostYT](https://github.com/irum0320/VolumeBoostYT)
+- [SpeedOverlay](https://github.com/jmswangit/SpeedOverlay) — replacement speed controls with a working current-speed display
 
 Original repo: https://github.com/dayanch96/YTLite
 
@@ -347,6 +348,12 @@ Fill out an [issue form](https://github.com/fosterbarnes/YTPlusYTweaks/issues) w
   <summary>VolumeBoostOverlay</summary>
   <p>Adds an independent volume boost control to the video overlay, adjustable from 0% to 2000% without touching the system volume. A fork of <a href="https://github.com/irum0320/VolumeBoostYT">VolumeBoostYT</a> reworked as a <a href="https://github.com/PoomSmart/YTVideoOverlay">YTVideoOverlay</a> plugin.
   <p>Source code and additional information are available <a href="https://github.com/jmswangit/VolumeBoostOverlay">in jmswangit's GitHub repository</a>.</p>
+</details>
+
+<details>
+  <summary>SpeedOverlay</summary>
+  <p>Replacement playback speed controls for the player overlay with a working, live current-speed display. Independent of YTLite's Speed controls.
+  <p>Source code and additional information are available <a href="https://github.com/jmswangit/SpeedOverlay">in jmswangit's GitHub repository</a>.</p>
 </details>
 
 <details>
