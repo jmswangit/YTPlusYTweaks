@@ -175,9 +175,14 @@ runs:
                 sed -i '' "s/TARGET := iphone:clang:[0-9.]*:/TARGET := iphone:clang:${SDK_VER}:/" Makefile
               fi
               if [ "$dir_name" = "PleaseDontStopTheMusic" ]; then
+                # Theos can't preprocess a parent-relative source (../Tweak.x),
+                # so copy it into the variant dir and build it like a normal tweak.
+                cp Tweak.x rootful/Tweak.x
                 cd rootful
+                make clean package FINALPACKAGE=1 PleaseDontStopTheMusic_FILES=Tweak.x
+              else
+                make clean package DEBUG=0 FINALPACKAGE=1 $make_extra
               fi
-              make clean package DEBUG=0 FINALPACKAGE=1 $make_extra
               mv packages/*.deb "${{ inputs.workspace }}/$output_file"
               if [ "$dir_name" = "PleaseDontStopTheMusic" ]; then
                 cd ../..

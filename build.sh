@@ -372,8 +372,13 @@ processTweak() {
     info "Building $name..."
     cd "$name"
     [[ "$name" == "YTUHD" ]] && make libvpx dav1d $makeExtra
-    [[ "$name" == "PleaseDontStopTheMusic" ]] && cd rootful
-    make clean package DEBUG=0 FINALPACKAGE=1 $makeExtra
+    if [[ "$name" == "PleaseDontStopTheMusic" ]]; then
+        cp Tweak.x rootful/Tweak.x
+        cd rootful
+        make clean package FINALPACKAGE=1 PleaseDontStopTheMusic_FILES=Tweak.x
+    else
+        make clean package DEBUG=0 FINALPACKAGE=1 $makeExtra
+    fi
     mv packages/*.deb "$BUILD_DIR/$debName"
     if [[ "$name" == "PleaseDontStopTheMusic" ]]; then cd ../..; else cd ..; fi
 
